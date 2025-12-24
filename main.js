@@ -16,7 +16,7 @@ const CONFIG = {
   colors: {
     inner: new THREE.Color(0x00eaff),
     core: new THREE.Color(0xff0055),
-    outer: new THREE.Color(0xffaa00),
+    outer: new THREE.Color(0xffaa00), 
     aura: new THREE.Color(0xaa00ff)
   }
 };
