@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #010103;
+  font-family: Arial, sans-serif;
+}
+
+#ui {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 1s;
+  z-index: 10;
+}
+
+#ui h1 {
+  font-size: 3em;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+
+#ui p {
+  font-size: 1.2em;
+  opacity: 0.8;
+}
