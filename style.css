@@ -3,6 +3,7 @@ body {
   overflow: hidden;
   background: #010103;
   font-family: Arial, sans-serif;
+  touch-action: none;
 }
 
 #ui {
@@ -15,15 +16,22 @@ body {
   pointer-events: none;
   transition: opacity 1s;
   z-index: 10;
+  padding: 0 20px;
 }
 
 #ui h1 {
-  font-size: 3em;
+  font-size: clamp(2em, 8vw, 3em);
   margin: 0;
   text-shadow: 0 0 20px rgba(255,255,255,0.5);
 }
 
 #ui p {
-  font-size: 1.2em;
+  font-size: clamp(1em, 4vw, 1.2em);
   opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  #ui {
+    width: 90%;
+  }
 }

@@ -4,11 +4,13 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-const DISPLAY_TEXT = "lil nigga";
+const DISPLAY_TEXT = "BOUCHRA";
+
+const isMobileDevice = window.innerWidth < 768;
 
 const CONFIG = {
-  particleCount: 80000,
-  auraCount: 12000,
+  particleCount: isMobileDevice ? 40000 : 80000,
+  auraCount: isMobileDevice ? 6000 : 12000,
   explosionForce: 3.5,
   formationSpeed: 0.025,
   colors: {
@@ -23,7 +25,8 @@ const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x010103, 0.005);
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 0, 80);
+const isMobile = window.innerWidth < 768;
+camera.position.set(0, 0, isMobile ? 120 : 80);
 
 const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -71,10 +74,13 @@ function getTextPoints(text, numPoints) {
   canvas.height = size;
   const ctx = canvas.getContext('2d');
   
+  const isMobile = window.innerWidth < 768;
+  const fontSize = isMobile ? 100 : 140;
+  
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, size, size);
   ctx.fillStyle = 'white';
-  ctx.font = 'bold 140px Arial, sans-serif';
+  ctx.font = `bold ${fontSize}px Arial, sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.letterSpacing = '5px';
