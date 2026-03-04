@@ -1,37 +1,321 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   overflow: hidden;
   background: #010103;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   touch-action: none;
 }
 
-#ui {
+/* ─── DIALOG OVERLAY ─────────────────────────────── */
+#dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(0,20,40,0.92) 0%, rgba(1,1,3,0.98) 100%);
+  backdrop-filter: blur(6px);
+  animation: overlayIn 0.6s ease forwards;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+#dialog-overlay.hide {
+  animation: overlayOut 0.7s ease forwards;
+}
+
+@keyframes overlayOut {
+  from { opacity: 1; }
+  to   { opacity: 0; pointer-events: none; }
+}
+
+/* ─── DIALOG BOX ─────────────────────────────────── */
+.dialog-box {
+  position: relative;
+  width: min(480px, 90vw);
+  padding: 48px 40px 40px;
+  border: 1px solid rgba(0, 234, 255, 0.25);
+  background: rgba(1, 6, 18, 0.85);
+  box-shadow:
+    0 0 0 1px rgba(0,234,255,0.08),
+    0 0 40px rgba(0,234,255,0.07),
+    inset 0 0 60px rgba(0,0,30,0.4);
+  animation: dialogIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dialogIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* corner accents */
+.dialog-box::before,
+.dialog-box::after {
+  content: '';
   position: absolute;
-  top: 50%;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(0,234,255,0.6);
+  border-style: solid;
+}
+.dialog-box::before {
+  top: -1px; left: -1px;
+  border-width: 2px 0 0 2px;
+}
+.dialog-box::after {
+  bottom: -1px; right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+.dialog-corner-tr,
+.dialog-corner-bl {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(0,234,255,0.6);
+  border-style: solid;
+}
+.dialog-corner-tr {
+  top: -1px; right: -1px;
+  border-width: 2px 2px 0 0;
+}
+.dialog-corner-bl {
+  bottom: -1px; left: -1px;
+  border-width: 0 0 2px 2px;
+}
+
+/* scan-line shimmer */
+.dialog-box .scanline {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,234,255,0.5), transparent);
+  animation: scan 3s ease-in-out infinite;
+}
+@keyframes scan {
+  0%   { top: 0%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ─── DIALOG CONTENT ─────────────────────────────── */
+.dialog-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(0,234,255,0.5);
+}
+.dialog-label::before {
+  content: '';
+  display: block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(0,234,255,0.7);
+  box-shadow: 0 0 8px rgba(0,234,255,0.9);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+.dialog-title {
+  margin: 0 0 28px;
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+.dialog-title span {
+  background: linear-gradient(90deg, #00eaff, #aa00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dialog-desc {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+}
+
+/* ─── INPUT WRAPPER ──────────────────────────────── */
+.input-wrapper {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(0,234,255,0.04);
+  border: 1px solid rgba(0,234,255,0.2);
+  color: #fff;
+  font-size: 1rem;
+  font-family: inherit;
+  letter-spacing: 1px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+  caret-color: #00eaff;
+}
+
+.input-wrapper input::placeholder {
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 1px;
+}
+
+.input-wrapper input:focus {
+  border-color: rgba(0,234,255,0.6);
+  background: rgba(0,234,255,0.07);
+  box-shadow: 0 0 20px rgba(0,234,255,0.1), inset 0 0 12px rgba(0,234,255,0.04);
+}
+
+.input-wrapper input.shake {
+  animation: shake 0.4s ease;
+  border-color: rgba(255,60,60,0.7);
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+/* char counter */
+.char-counter {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 28px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.25);
+  transition: color 0.3s;
+}
+.char-counter.warn { color: rgba(255,180,0,0.8); }
+.char-counter.over { color: rgba(255,60,60,0.9); }
+
+/* ─── LAUNCH BUTTON ──────────────────────────────── */
+.btn-launch {
+  position: relative;
+  width: 100%;
+  padding: 15px 24px;
+  background: transparent;
+  border: 1px solid rgba(0,234,255,0.4);
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.btn-launch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,234,255,0.12), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+.btn-launch:hover::before { transform: translateX(100%); }
+.btn-launch:hover {
+  border-color: rgba(0,234,255,0.8);
+  box-shadow: 0 0 20px rgba(0,234,255,0.15);
+}
+.btn-launch:active { transform: scale(0.98); }
+
+/* ─── CHANGE TEXT BUTTON (floating) ─────────────── */
+#change-btn {
+  position: fixed;
+  bottom: 32px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  text-align: center;
+  transform: translateX(-50%);
+  z-index: 50;
+  padding: 11px 28px;
+  background: transparent;
+  border: 1px solid rgba(0,234,255,0.3);
+  color: rgba(255,255,255,0.6);
+  font-size: 11px;
+  font-family: inherit;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#change-btn.visible {
+  opacity: 1;
+  pointer-events: all;
+  animation: fadeUp 0.6s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+#change-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,234,255,0.08), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+#change-btn:hover::before { transform: translateX(100%); }
+#change-btn:hover {
+  border-color: rgba(0,234,255,0.7);
+  color: rgba(255,255,255,0.95);
+  box-shadow: 0 0 16px rgba(0,234,255,0.12);
+}
+
+/* corner accents on change btn */
+#change-btn .c { position: absolute; width: 5px; height: 5px; border-color: rgba(0,234,255,0.5); border-style: solid; }
+#change-btn .c.tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+#change-btn .c.tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+#change-btn .c.bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
+#change-btn .c.br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+/* ─── HINT TEXT ──────────────────────────────────── */
+#hint {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  opacity: 0;
   pointer-events: none;
   transition: opacity 1s;
-  z-index: 10;
-  padding: 0 20px;
+  white-space: nowrap;
 }
-
-#ui h1 {
-  font-size: clamp(2em, 8vw, 3em);
-  margin: 0;
-  text-shadow: 0 0 20px rgba(255,255,255,0.5);
-}
-
-#ui p {
-  font-size: clamp(1em, 4vw, 1.2em);
-  opacity: 0.8;
-}
+#hint.visible { opacity: 1; }
 
 @media (max-width: 768px) {
-  #ui {
-    width: 90%;
-  }
+  .dialog-box { padding: 36px 24px 32px; }
+  #change-btn { bottom: 24px; font-size: 10px; padding: 10px 22px; }
 }

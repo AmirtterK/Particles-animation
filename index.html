@@ -1,24 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-  <title>for u</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="ui">
-  </div>
-  
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+    <title>Particles</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <!-- ── INTRO DIALOG ─────────────────────────────── -->
+    <div id="dialog-overlay">
+      <div class="dialog-box">
+        <div class="scanline"></div>
+        <div class="dialog-corner-tr"></div>
+        <div class="dialog-corner-bl"></div>
+
+        <div class="dialog-label">Particle System</div>
+        <h1 class="dialog-title">What should the<br><span>particles spell?</span></h1>
+        <p class="dialog-desc">
+          Enter up to 12 characters. Short words &amp; names work best — the particles will form your text in 3D space.
+        </p>
+
+        <div class="input-wrapper">
+          <input
+            id="text-input"
+            type="text"
+            maxlength="12"
+            placeholder="e.g.  HELLO"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+        <div class="char-counter"><span id="char-count">0</span>&nbsp;/ 12</div>
+
+        <button class="btn-launch" id="launch-btn">
+          &#9654;&nbsp;&nbsp;Launch
+        </button>
+      </div>
+    </div>
+
+    <!-- ── HINT + CHANGE BUTTON ─────────────────────── -->
+    <div id="hint">click &amp; drag to rotate · tap to explode</div>
+    <button id="change-btn">
+      <span class="c tl"></span><span class="c tr"></span>
+      <span class="c bl"></span><span class="c br"></span>
+      &#9998;&nbsp; Change Text
+    </button>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+        }
       }
-    }
-  </script>
-  
-  <script type="module" src="main.js"></script>
-</body>
+    </script>
+    <script type="module" src="main.js"></script>
+  </body>
 </html>
