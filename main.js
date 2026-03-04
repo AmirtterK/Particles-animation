@@ -13,10 +13,10 @@ const CONFIG = {
   particleCount:  isMobileDevice ? 40000 : 80000,
   auraCount:      isMobileDevice ? 6000  : 12000,
   ringCount:      isMobileDevice ? 1200  : 2400,
-  explosionForce: 3.5,
+  explosionForce: 1.2,
   formationSpeed: 0.025,
-  repulseRadius:  18,
-  repulseStrength: 0.18,
+  repulseRadius:  5,
+  repulseStrength: 0.09,
   colors: {
     inner: new THREE.Color(0x00eaff),
     core:  new THREE.Color(0xff0055),
@@ -51,6 +51,23 @@ input.addEventListener('keydown', e => {
 });
 
 launchBtn.addEventListener('click', tryLaunch);
+
+// Dismiss dialog by clicking the backdrop or pressing Esc
+overlay.addEventListener('pointerdown', (e) => {
+  if (e.target === overlay && DISPLAY_TEXT) dismissDialog();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && overlay.style.display !== 'none' && DISPLAY_TEXT) dismissDialog();
+});
+
+function dismissDialog() {
+  overlay.classList.add('hide');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    changeBtn.classList.add('visible');
+  }, 700);
+}
+
 changeBtn.addEventListener('click', () => {
   // show dialog again
   overlay.classList.remove('hide');
@@ -474,9 +491,10 @@ function animate() {
   animateRing(time);
   updateShootingStars();
 
-  if (mainText && time > nextStar) {
+  if (time > nextStar) {
     spawnShootingStar();
-    nextStar = time + 4 + Math.random()*5;
+    if (Math.random() > 0.5) spawnShootingStar();
+    nextStar = time + 1.5 + Math.random()*2.5;
   }
 
   controls.update();
