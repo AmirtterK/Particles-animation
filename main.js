@@ -37,7 +37,7 @@ const charCount  = document.getElementById('char-count');
 const launchBtn  = document.getElementById('launch-btn');
 const changeBtn  = document.getElementById('change-btn');
 const hint       = document.getElementById('hint');
-const MAX_CHARS  = 12;
+const MAX_CHARS  = 15;
 
 input.addEventListener('input', () => {
   const len = input.value.length;
